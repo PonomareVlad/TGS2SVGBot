@@ -11,6 +11,7 @@
     "start": "node --watch -r dotenv/config scripts/start.mjs"
   },
   "dependencies": {
+    "@roziscoding/grammy-autoquote": "^1.1.2",
     "grammy": "^1.17.1",
     "vercel-grammy": "^0.1.1"
   },
