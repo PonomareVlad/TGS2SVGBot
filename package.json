@@ -14,7 +14,7 @@
     "@grammyjs/files": "^1.0.4",
     "@roziscoding/grammy-autoquote": "^1.1.2",
     "grammy": "^1.17.1",
-    "vercel-grammy": "^0.1.1"
+    "vercel-grammy": "^0.2.1"
   },
   "devDependencies": {
     "dotenv": "^16.3.1"
