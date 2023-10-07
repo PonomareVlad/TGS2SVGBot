@@ -1,6 +1,8 @@
 import {Bot, InputFile} from "grammy";
 import {autoQuote} from "@roziscoding/grammy-autoquote";
 
+const isNode = typeof EdgeRuntime !== "string";
+
 export const {
     API_URL: apiURL,
     TELEGRAM_BOT_TOKEN: token,
@@ -36,11 +38,13 @@ safe.on("::custom_emoji", async ctx => {
 safe.on("msg", ctx => ctx.reply(`Send animated sticker or custom emoji`));
 
 async function convert({file_path} = {}, filename = "sticker.svg") {
-    const {body} = await fetch(new URL(file_path, fileApiURL).href);
+    const tgsResponse = await fetch(new URL(file_path, fileApiURL).href);
     const svgResponse = await fetch(apiURL, {
+        body: isNode ? await tgsResponse.blob() : tgsResponse.body,
         headers: {"Content-Type": "application/octet-stream"},
         method: "POST",
-        body,
     });
-    return new InputFile(await svgResponse.blob(), filename);
+    const svg = await svgResponse.blob();
+    const result = isNode ? svg.stream() : svg;
+    return new InputFile(result, filename);
 }
