@@ -1,5 +1,6 @@
-import {getURL} from "vercel-grammy";
 import {bot, secretToken} from "../src/bot.mjs";
+import {initJob} from "grammy-tasks";
+import {getURL} from "vercel-grammy";
 
 const {VERCEL_ENV} = process.env;
 
@@ -26,5 +27,6 @@ if (await bot.api.setWebhook(url, options)) {
 
     console.info("Webhook set to URL:", url);
     console.info("Secret token:", secretToken);
+    console.info("Tasks job:", await initJob());
 
 }

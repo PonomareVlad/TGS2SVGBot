@@ -1,3 +1,5 @@
+import "grammy-debug-edge";
+import {BotTask} from "grammy-tasks";
 import {Bot, InputFile} from "grammy";
 import {autoRetry} from "@grammyjs/auto-retry";
 import {autoQuote} from "@roziscoding/grammy-autoquote";
@@ -47,6 +49,8 @@ safe.on("::custom_emoji", async ctx => {
         }
     }
 });
+
+safe.command("test", ({chat: {id: chat_id} = {}, match} = {}) => new BotTask({chat_id, args: [match]}).now());
 
 safe.on("msg", ctx => ctx.reply(`Send animated sticker or custom emoji`));
 
