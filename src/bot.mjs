@@ -1,5 +1,4 @@
 import "grammy-debug-edge";
-import {BotTask} from "grammy-tasks";
 import {Bot, InputFile} from "grammy";
 import {autoRetry} from "@grammyjs/auto-retry";
 import {autoQuote} from "@roziscoding/grammy-autoquote";
@@ -50,13 +49,13 @@ safe.on("::custom_emoji", async ctx => {
     }
 });
 
-safe.command("test", ({chat: {id: chat_id} = {}, match} = {}) => new BotTask({chat_id, args: [match]}).now());
-
 safe.on("msg", ctx => ctx.reply(`Send animated sticker or custom emoji`));
 
-async function convert({file_path} = {}, filename = "sticker.svg") {
+async function convert({file_path} = {}, filename = "sticker.svg", frame) {
     const tgsResponse = await fetch(new URL(file_path, fileApiURL).href);
-    const svgResponse = await fetch(apiURL, {
+    const url = new URL(apiURL)
+    if (frame) url.searchParams.set('frame', frame)
+    const svgResponse = await fetch(url, {
         body: isNode ? await tgsResponse.blob() : tgsResponse.body,
         headers: {"Content-Type": "application/octet-stream"},
         method: "POST",
