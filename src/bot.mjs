@@ -1,5 +1,5 @@
 import "grammy-debug-edge";
-import {Bot, InputFile} from "grammy";
+import {Bot, Context, InputFile} from "grammy";
 import {autoRetry} from "@grammyjs/auto-retry";
 import {autoQuote} from "@roziscoding/grammy-autoquote";
 
@@ -49,7 +49,39 @@ safe.on("::custom_emoji", async ctx => {
     }
 });
 
-safe.on("msg", ctx => ctx.reply(`Send animated sticker or custom emoji`));
+safe.on("msg", async ctx => {
+    const message = ctx.msg.reply_to_message
+    if (message) {
+        const context = new Context({message}, ctx.api, ctx.me);
+        switch (true) {
+            case Context.has.filterQuery(":sticker:is_animated")(context): {
+                void ctx.replyWithChatAction("upload_document").catch(console.error);
+                const file = await convert(await context.getFile(), undefined, ctx.msg.text);
+                return ctx.replyWithDocument(file);
+            }
+            case Context.has.filterQuery("::custom_emoji")(context): {
+                void ctx.replyWithChatAction("upload_document").catch(console.error);
+                const stickers = await context.getCustomEmojiStickers();
+                const animated = stickers.filter(({is_animated} = {}) => is_animated);
+                if (!animated.length) return ctx.reply("Send animated (vector) emoji");
+                for (const index in animated) {
+                    try {
+                        void ctx.replyWithChatAction("upload_document").catch(console.error);
+                        const {file_id} = animated[index];
+                        const file = await ctx.api.getFile(file_id);
+                        const filename = [parseInt(index) + 1, "svg"].join(".");
+                        const svg = await convert(file, filename, ctx.msg.text);
+                        await ctx.replyWithDocument(svg);
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+                return;
+            }
+        }
+    }
+    return ctx.reply(`Send animated sticker or custom emoji`);
+});
 
 async function convert({file_path} = {}, filename = "sticker.svg", frame) {
     const tgsResponse = await fetch(new URL(file_path, fileApiURL).href);
