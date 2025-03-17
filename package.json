@@ -13,6 +13,6 @@
     "@roziscoding/grammy-autoquote": "^1.1.2",
     "grammy": "1.18.1",
     "grammy-debug-edge": "^0.0.0",
-    "vercel-grammy": "^0.2.1"
+    "vercel-grammy": "^1.0.0"
   }
 }
