@@ -9,7 +9,7 @@
     "start": "node --watch --env-file=.env scripts/start.mjs"
   },
   "dependencies": {
-    "@grammyjs/auto-retry": "^1.1.1",
+    "@grammyjs/auto-retry": "^2.0.2",
     "@roziscoding/grammy-autoquote": "^1.1.2",
     "grammy": "1.18.1",
     "grammy-debug-edge": "^0.0.0",
