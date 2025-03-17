@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@grammyjs/auto-retry": "^1.1.1",
-    "@roziscoding/grammy-autoquote": "^1.1.2",
+    "@roziscoding/grammy-autoquote": "^2.0.8",
     "grammy": "1.18.1",
     "grammy-debug-edge": "^0.0.0",
     "vercel-grammy": "^0.2.1"
