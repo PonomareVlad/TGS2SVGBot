@@ -13,9 +13,9 @@ export const {
 
 export const bot = new Bot(token);
 
-bot.use(autoQuote);
-
 const safe = bot.errorBoundary(console.error);
+
+safe.use(autoQuote);
 
 safe.on(":sticker:is_animated", async ctx => {
     void ctx.replyWithChatAction("upload_document").catch(console.error);
