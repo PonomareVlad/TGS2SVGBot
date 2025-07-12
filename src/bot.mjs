@@ -1,6 +1,5 @@
 import "grammy-debug-edge";
 import {Bot, Context, InputFile} from "grammy";
-import {autoRetry} from "@grammyjs/auto-retry";
 import {autoQuote} from "@roziscoding/grammy-autoquote";
 
 const isNode = typeof EdgeRuntime !== "string";
@@ -13,12 +12,6 @@ export const {
 } = process.env;
 
 export const bot = new Bot(token);
-
-bot.api.config.use(autoRetry({
-    retryOnInternalServerErrors: true,
-    maxRetryAttempts: 1,
-    maxDelaySeconds: 10
-}));
 
 bot.use(autoQuote);
 
